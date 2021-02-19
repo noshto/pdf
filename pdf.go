@@ -22,6 +22,7 @@ import (
 // Params represents collection of parameters needed for Generate function
 type Params struct {
 	SepConfig      *sep.Config
+	Clients        *[]sep.Client
 	InternalInvNum string
 	ReqFile        string
 	RespFile       string
@@ -198,7 +199,7 @@ func GeneratePDF(params *Params) error {
 		})
 		m.Col(6, func() {
 			client := &sep.Client{}
-			for _, it := range params.SepConfig.Clients {
+			for _, it := range *params.Clients {
 				if it.TIN == request.Invoice.Buyer.IDNum {
 					client = &it
 					break
