@@ -651,16 +651,9 @@ func GenerateExempt(
 		Extrapolate: true,
 	}
 
-	BodyRightAlignTextAttrib := props.Text{
+	CaptionTextAttrib := props.Text{
 		Size:        8,
-		Align:       consts.Right,
-		Style:       consts.Normal,
-		Extrapolate: true,
-	}
-
-	CaptionRightAlignTextAttrib := props.Text{
-		Size:        8,
-		Align:       consts.Right,
+		Align:       consts.Left,
 		Style:       consts.Bold,
 		Extrapolate: true,
 	}
@@ -713,64 +706,66 @@ func GenerateExempt(
 		})
 	})
 
+	m.Row(5, func() {})
+
 	// Summary
 	m.Row(32, func() {
 		m.ColSpace(6)
 		m.Row(4, func() {
 			m.Col(3, func() {
-				m.Text("Koliko ukupno faktura:", BodyRightAlignTextAttrib)
+				m.Text("Koliko ukupno faktura:", BodyTextAttrib)
 			})
 			m.Col(3, func() {
-				m.Text(strconv.FormatInt(int64(num), 10), BodyRightAlignTextAttrib)
-			})
-			m.ColSpace(6)
-		})
-
-		m.Row(4, func() {
-			m.Col(3, func() {
-				m.Text("Koliko osnovica prije rabata:", BodyRightAlignTextAttrib)
-			})
-			m.Col(3, func() {
-				m.Text(strconv.FormatFloat(PBWoR, 'f', 2, 64), BodyRightAlignTextAttrib)
+				m.Text(strconv.FormatInt(int64(num), 10), BodyTextAttrib)
 			})
 			m.ColSpace(6)
 		})
 
 		m.Row(4, func() {
 			m.Col(3, func() {
-				m.Text("Koliko rabat:", BodyRightAlignTextAttrib)
+				m.Text("Koliko osnovica prije rabata:", BodyTextAttrib)
 			})
 			m.Col(3, func() {
-				m.Text(strconv.FormatFloat(R, 'f', 2, 64), BodyRightAlignTextAttrib)
-			})
-			m.ColSpace(6)
-		})
-		m.Row(4, func() {
-			m.Col(3, func() {
-				m.Text("Koliko osnovica posle rabata:", BodyRightAlignTextAttrib)
-			})
-			m.Col(3, func() {
-				m.Text(strconv.FormatFloat(PBR, 'f', 2, 64), BodyRightAlignTextAttrib)
+				m.Text(strconv.FormatFloat(PBWoR, 'f', 2, 64), BodyTextAttrib)
 			})
 			m.ColSpace(6)
 		})
 
 		m.Row(4, func() {
 			m.Col(3, func() {
-				m.Text("Koliko PDV:", BodyRightAlignTextAttrib)
+				m.Text("Koliko rabat:", BodyTextAttrib)
 			})
 			m.Col(3, func() {
-				m.Text(strconv.FormatFloat(VA, 'f', 2, 64), BodyRightAlignTextAttrib)
+				m.Text(strconv.FormatFloat(R, 'f', 2, 64), BodyTextAttrib)
+			})
+			m.ColSpace(6)
+		})
+		m.Row(4, func() {
+			m.Col(3, func() {
+				m.Text("Koliko osnovica posle rabata:", BodyTextAttrib)
+			})
+			m.Col(3, func() {
+				m.Text(strconv.FormatFloat(PBR, 'f', 2, 64), BodyTextAttrib)
 			})
 			m.ColSpace(6)
 		})
 
 		m.Row(4, func() {
 			m.Col(3, func() {
-				m.Text("Koliko ukupno sa PDV:", CaptionRightAlignTextAttrib)
+				m.Text("Koliko PDV:", BodyTextAttrib)
 			})
 			m.Col(3, func() {
-				m.Text(strconv.FormatFloat(Total, 'f', 2, 64), CaptionRightAlignTextAttrib)
+				m.Text(strconv.FormatFloat(VA, 'f', 2, 64), BodyTextAttrib)
+			})
+			m.ColSpace(6)
+		})
+
+		m.Row(4, func() {
+			m.Col(3, func() {
+				m.Text("Koliko ukupno sa PDV:", CaptionTextAttrib)
+			})
+			m.Col(3, func() {
+				m.Text(strconv.FormatFloat(Total, 'f', 2, 64), CaptionTextAttrib)
 			})
 			m.ColSpace(6)
 		})
