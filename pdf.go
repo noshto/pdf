@@ -162,8 +162,8 @@ func GeneratePDF(params *Params) error {
 	// Invoice issue date on the left and Buyer name on the right
 	m.Row(4, func() {
 		m.Col(6, func() {
-			IssueDateTime := time.Time(request.Invoice.IssueDateTime).Format("2006-01-02")
-			m.Text(strings.Join([]string{"Datum prometa dobara:", IssueDateTime}, " "), BodyTextAttrib)
+			IssueDateTime := time.Time(request.Invoice.IssueDateTime).Format(time.RFC3339)
+			m.Text(strings.Join([]string{"Datum izadvanja fakture:", IssueDateTime}, " "), BodyTextAttrib)
 		})
 		addressString := strings.Join([]string{request.Invoice.Buyer.Address, request.Invoice.Buyer.Town, request.Invoice.Buyer.Country}, ", ")
 		addressString = strings.TrimRight(addressString, ", ")
