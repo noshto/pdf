@@ -623,3 +623,158 @@ func RegisterInvoiceResponse(filePath string) (*sep.RegisterInvoiceResponse, err
 	err = xml.Unmarshal(buf, &RegisterInvoiceResponse)
 	return &RegisterInvoiceResponse, err
 }
+
+// GenerateExempt generates exempt from given data
+func GenerateExempt(
+	cfg *sep.Config,
+	from, to time.Time,
+	num int,
+	PBWoR, R, PBR, VA, Total float64,
+	filePath string,
+) error {
+
+	m := pdf.NewMaroto(consts.Portrait, consts.A4)
+	m.SetPageMargins(10, 15, 10)
+	m.SetBackgroundColor(color.NewWhite())
+
+	TitleTextAttrib := props.Text{
+		Size:        20,
+		Align:       consts.Left,
+		Style:       consts.Bold,
+		Extrapolate: false,
+	}
+
+	BodyTextAttrib := props.Text{
+		Size:        8,
+		Align:       consts.Left,
+		Style:       consts.Normal,
+		Extrapolate: true,
+	}
+
+	BodyRightAlignTextAttrib := props.Text{
+		Size:        8,
+		Align:       consts.Right,
+		Style:       consts.Normal,
+		Extrapolate: true,
+	}
+
+	CaptionRightAlignTextAttrib := props.Text{
+		Size:        8,
+		Align:       consts.Right,
+		Style:       consts.Bold,
+		Extrapolate: true,
+	}
+
+	// Company Name
+	m.Row(20, func() {
+		m.Col(12, func() {
+			m.Text(cfg.Name, TitleTextAttrib)
+		})
+
+		m.Row(12, func() {})
+
+		// Company details
+		m.Row(4, func() {
+			m.Col(6, func() {
+				m.Text(cfg.Address, BodyTextAttrib)
+			})
+
+			m.Col(6, func() {
+				m.Text(strings.Join([]string{"PIB:", cfg.TIN}, " "), BodyTextAttrib)
+			})
+		})
+		m.Row(4, func() {
+			m.Col(6, func() {
+				m.Text(strings.Join([]string{"Tel:", cfg.Phone}, " "), BodyTextAttrib)
+			})
+			m.Col(6, func() {
+				m.Text(strings.Join([]string{"PDV:", cfg.VAT}, " "), BodyTextAttrib)
+			})
+		})
+		m.Row(4, func() {
+			m.Col(6, func() {
+				m.Text(strings.Join([]string{"Fax:", cfg.Fax}, " "), BodyTextAttrib)
+			})
+			m.Col(6, func() {
+				m.Text(strings.Join([]string{"Z.R.:", cfg.BankAccount}, " "), BodyTextAttrib)
+			})
+		})
+	})
+
+	m.Line(6)
+
+	// Period
+	m.Row(4, func() {
+		m.Col(6, func() {
+			From := time.Time(from).Format("2006-01-02")
+			To := time.Time(to).Format("2006-01-02")
+			period := strings.Join([]string{From, To}, " - ")
+			m.Text(strings.Join([]string{"IZVESTAJ ZA PERIOD:", period}, " "), BodyTextAttrib)
+		})
+	})
+
+	// Summary
+	m.Row(32, func() {
+		m.ColSpace(6)
+		m.Row(4, func() {
+			m.Col(3, func() {
+				m.Text("Koliko ukupno faktura:", BodyRightAlignTextAttrib)
+			})
+			m.Col(3, func() {
+				m.Text(strconv.FormatInt(int64(num), 10), BodyRightAlignTextAttrib)
+			})
+			m.ColSpace(6)
+		})
+
+		m.Row(4, func() {
+			m.Col(3, func() {
+				m.Text("Koliko osnovica prije rabata:", BodyRightAlignTextAttrib)
+			})
+			m.Col(3, func() {
+				m.Text(strconv.FormatFloat(PBWoR, 'f', 2, 64), BodyRightAlignTextAttrib)
+			})
+			m.ColSpace(6)
+		})
+
+		m.Row(4, func() {
+			m.Col(3, func() {
+				m.Text("Koliko rabat:", BodyRightAlignTextAttrib)
+			})
+			m.Col(3, func() {
+				m.Text(strconv.FormatFloat(R, 'f', 2, 64), BodyRightAlignTextAttrib)
+			})
+			m.ColSpace(6)
+		})
+		m.Row(4, func() {
+			m.Col(3, func() {
+				m.Text("Koliko osnovica posle rabata:", BodyRightAlignTextAttrib)
+			})
+			m.Col(3, func() {
+				m.Text(strconv.FormatFloat(PBR, 'f', 2, 64), BodyRightAlignTextAttrib)
+			})
+			m.ColSpace(6)
+		})
+
+		m.Row(4, func() {
+			m.Col(3, func() {
+				m.Text("Koliko PDV:", BodyRightAlignTextAttrib)
+			})
+			m.Col(3, func() {
+				m.Text(strconv.FormatFloat(VA, 'f', 2, 64), BodyRightAlignTextAttrib)
+			})
+			m.ColSpace(6)
+		})
+
+		m.Row(4, func() {
+			m.Col(3, func() {
+				m.Text("Koliko ukupno sa PDV:", CaptionRightAlignTextAttrib)
+			})
+			m.Col(3, func() {
+				m.Text(strconv.FormatFloat(Total, 'f', 2, 64), CaptionRightAlignTextAttrib)
+			})
+			m.ColSpace(6)
+		})
+	})
+
+	return m.OutputFileAndClose(filePath)
+}
