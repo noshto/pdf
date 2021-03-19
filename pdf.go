@@ -176,9 +176,9 @@ func GeneratePDF(params *Params) error {
 	m.Row(4, func() {
 		m.Col(6, func() {
 			Currency := "EUR"
-			if request.Invoice.Currency != nil {
-				Currency = string(request.Invoice.Currency.Code)
-			}
+			// if request.Invoice.Currency != nil {
+			// 	Currency = string(request.Invoice.Currency.Code)
+			// }
 			m.Text(strings.Join([]string{"Valuta:", string(Currency)}, " "), BodyTextAttrib)
 		})
 		m.Col(6, func() {
