@@ -298,7 +298,7 @@ func GeneratePDF(params *Params) error {
 	for _, it := range *request.Invoice.Items {
 		PriceBeforeVAT += float64(it.UPB * it.Q)
 		Rebate += PriceBeforeVAT * (float64(it.R) / 100)
-		VATAmt += (PriceBeforeVAT - Rebate) * (float64(it.VR) / 100)
+		VATAmt += float64(it.VA)
 	}
 	Base21 := PriceBeforeVAT - Rebate
 	TotPrice := strconv.FormatFloat(float64(request.Invoice.TotPrice), 'f', 2, 64)
