@@ -506,6 +506,9 @@ func GeneratePDF(params *Params) error {
 	}
 
 	m.Row(4, func() {
+		m.Text("Rok placanja: 7 dana.", BodyTextAttrib)
+	})
+	m.Row(4, func() {
 		m.Text("U slucaju ne placanja u dogovorenom roku obracunava se zatezna kamata.", BodyTextAttrib)
 	})
 	m.Row(4, func() {
